@@ -1,0 +1,65 @@
+{
+  "lines": [
+    "function unrelatedFunction() {\r",
+    "    console.log(\"This is not an inject function.\");\r",
+    "}\r",
+    "\r",
+    "// @Inject(method = \"onInit\", at = \"HEAD\", ordinal = 0)\r",
+    "function initHook() {\r",
+    "    console.log(\"Injected at onInit HEAD with ordinal 0\");\r",
+    "}\r",
+    "\r",
+    "// @Inject(method=\"onRender\", at=\"TAIL\")\r",
+    "const renderHook = () => {\r",
+    "    console.log(\"Injected at onRender TAIL with no ordinal\");\r",
+    "}\r",
+    "const x = 42;\r",
+    "\r",
+    "// @Inject(method=\"onClick\", at=\"HEAD\", ordinal=2)\r",
+    "function clickHook() {\r",
+    "    const now = Date.now();\r",
+    "    console.log(\"Click hook executed at\", now);\r",
+    "}\r",
+    "\r",
+    "// @Inject(method = \"run(args)\", at=\"HEAD\")\r",
+    "function runHook(args) {\r",
+    "\r",
+    "}\r",
+    ""
+  ],
+  "code": "function unrelatedFunction() {\r\n    console.log(\"This is not an inject function.\");\r\n}\r\n\r\n// @Inject(method = \"onInit\", at = \"HEAD\", ordinal = 0)\r\nfunction initHook() {\r\n    console.log(\"Injected at onInit HEAD with ordinal 0\");\r\n}\r\n\r\n// @Inject(method=\"onRender\", at=\"TAIL\")\r\nconst renderHook = () => {\r\n    console.log(\"Injected at onRender TAIL with no ordinal\");\r\n}\r\nconst x = 42;\r\n\r\n// @Inject(method=\"onClick\", at=\"HEAD\", ordinal=2)\r\nfunction clickHook() {\r\n    const now = Date.now();\r\n    console.log(\"Click hook executed at\", now);\r\n}\r\n\r\n// @Inject(method = \"run(args)\", at=\"HEAD\")\r\nfunction runHook(args) {\r\n\r\n}\r\n",
+  "methods": [
+    {
+      "match": {
+        "method": "onInit",
+        "at": "HEAD",
+        "ordinal": 0
+      },
+      "code": "function initHook() {\r\n    console.log(\"Injected at onInit HEAD with ordinal 0\");\r\n}\r"
+    },
+    {
+      "match": {
+        "method": "onRender",
+        "at": "TAIL",
+        "ordinal": 0
+      },
+      "code": "const renderHook = () => {\r\n    console.log(\"Injected at onRender TAIL with no ordinal\");\r\n}\r"
+    },
+    {
+      "match": {
+        "method": "onClick",
+        "at": "HEAD",
+        "ordinal": 2
+      },
+      "code": "function clickHook() {\r\n    const now = Date.now();\r\n    console.log(\"Click hook executed at\", now);\r\n}\r"
+    },
+    {
+      "match": {
+        "method": "run(args)",
+        "at": "HEAD",
+        "ordinal": 0
+      },
+      "code": "function runHook(args) {\r\n\r\n}\r"
+    }
+  ]
+}
