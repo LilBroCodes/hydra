@@ -1,19 +1,26 @@
 {
   "name": "hydra",
   "version": "1.0.0",
-  "description": "",
+  "description": "\"Modding\" framework for compiled / obfuscated javascript ",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\""
+    "test": "mocha -r tsx/register \"test/**/*.test.ts\"",
+    "dev": "cd run && tsx ../src/main.ts"
   },
   "dependencies": {},
   "devDependencies": {
     "@types/mocha": "^10.0.10",
     "@types/node": "^22.15.19",
+    "cross-env-shell": "^7.0.3",
     "mocha": "^11.4.0",
-    "ts-node": "^10.9.2",
+    "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
-  "private": true
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/LilBroCodes/hydra"
+  },
+  "license": "SEE LICENSE IN LICENSE"
 }
