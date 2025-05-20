@@ -1,7 +1,8 @@
-function getResource(fileName) {
+export const base = {
+  script: `function getResource(fileName) {
     return fetch(chrome.runtime.getURL(fileName))
         .then(res => {
-            if (!res.ok) throw new Error(`HTTP ${res.status}`);
+            if (!res.ok) throw new Error(\`HTTP \${res.status}\`);
             return res.text();
         });
 }
@@ -59,11 +60,55 @@ chrome.webRequest.onBeforeRequest.addListener(
                 filter.disconnect();
             });
 
-        return {}
+        return {};
     },
     {
         urls: config ? config.urls : ["<all_urls>"],
         types: ["script"]
     },
     ["blocking"]
-);
+);`,
+
+  config: `{
+  "manifest_version": 3,
+  "name": "Hydra Loader",
+  "version": "1.0",
+  "permissions": [
+    "webRequest",
+    "webRequestBlocking",
+    "webRequestFilterResponse",
+    "scripting",
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess"
+  ],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Hydra Loader"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "%EXPOSED_FILES%"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}`
+};

@@ -9,7 +9,7 @@ function hashFile(filename: string): string {
     return crypto.createHash("sha256").update(fileBuffer).digest("hex");
 }
 
-export function processSourceFile(inputPath: string, outputPath: string = ".build_cache.json"): LoadedSource {
+export function processSourceFile(inputPath: string, outputPath: string = ".build_cache.json", write: boolean = true): LoadedSource {
     const absoluteInputPath = path.resolve(inputPath);
     const absoluteOutputPath = path.resolve(outputPath);
 
@@ -29,10 +29,12 @@ export function processSourceFile(inputPath: string, outputPath: string = ".buil
 
     const loadedSource = parseSourceFile(absoluteInputPath);
 
-    fs.writeFileSync(
+    if (write) {
+        fs.writeFileSync(
         absoluteOutputPath,
         JSON.stringify({ hash: currentHash, source: loadedSource }, null, 2)
     );
+    }
 
     console.log("Source processed and written to", outputPath);
     return loadedSource;

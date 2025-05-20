@@ -2,6 +2,8 @@ import * as t from '@babel/types';
 import * as parser from '@babel/parser';
 import traverse from "@babel/traverse";
 import generate from '@babel/generator';
+import fs from "fs";
+import path from "path";
 
 export function insertAt(original: string, insert: string, index: number): string {
     return original.slice(0, index) + insert + original.slice(index);
@@ -47,3 +49,15 @@ export function getParamCount(raw: string): number {
     return paramCount;
 }
 
+export function findProjectFile(): string | undefined {
+  const cwd = process.cwd();
+  const files = fs.readdirSync(cwd);
+
+  for (const file of files) {
+    if (path.extname(file) === '.hproj') {
+      return path.basename(file, '.hproj');
+    }
+  }
+
+  return undefined;
+}

@@ -1,6 +1,6 @@
-import {getCompressedCode, getParamCount} from "./utils/utils";
-import { processSourceFile } from "./source/processor";
-import { Mixin } from "./mixin/mixin";
+import {getCompressedCode, getParamCount} from "../utils/utils";
+import { processSourceFile } from "../source/processor";
+import { Mixin } from "../mixin/mixin";
 
 import fs from "fs";
 import path from "path";

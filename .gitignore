@@ -1,5 +1,6 @@
 /tmp
 /out-tsc
+/dist
 
 /node_modules
 npm-debug.log*
@@ -12,3 +13,5 @@ yarn-error.log*
 /yarn.lock
 /.idea/
 /run/
+package-lock.json
+/build
