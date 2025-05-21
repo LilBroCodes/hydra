@@ -1,10 +1,9 @@
 import {Tag} from "./tags/tag";
 import {parseMixinCode} from "./mixinParser";
-import {BaseAt, ExtendedAt} from "./tags/at";
 import {Inject} from "./tags/inject";
-import {ModifyReturnValue} from "./tags/modifyReturnValue";
 import fs from "fs";
 import path from "path";
+import {Unique} from "./tags/unique";
 
 export class Mixin {
     code: string;
@@ -35,9 +34,9 @@ export class TaggedMethod {
     line: number;
     code: string
     comment: string
-    tag: BaseAt | ExtendedAt | Inject | ModifyReturnValue | null
+    tag: Unique | Inject | null
 
-    constructor(line: number, code: string, comment: string, tag: BaseAt | ExtendedAt | Inject | ModifyReturnValue | null) {
+    constructor(line: number, code: string, comment: string, tag: Unique | Inject | null) {
         this.line = line;
         this.code = code;
         this.comment = comment;
