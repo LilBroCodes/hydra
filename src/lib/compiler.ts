@@ -37,7 +37,8 @@ export function run(
       });
 
       if (sourceFunc) {
-        const lineIndex = sourceFunc.startLine - 1;
+        const at = method.tag.at.where == "TAIL" ? "TAIL" : "HEAD"
+        const lineIndex = at == "HEAD" ? sourceFunc.startLine - 1 : sourceFunc.endLine - 1;
 
         if (lineIndex < 0 || lineIndex >= lines.length) {
           console.error(
@@ -46,9 +47,10 @@ export function run(
           continue;
         }
 
-        const columnIndex = sourceFunc.startColumn + 1;
+        const columnIndex = at == "HEAD" ? sourceFunc.startColumn + 1 : sourceFunc.endColumn - 1;
 
-        const codeToInsert = getCompressedCode(method.code);
+        const codeStart = at == "TAIL" && lines[lineIndex].substring(0, columnIndex) != "" && !lines[lineIndex].match(/\s*;\s*/) ? ";" : "";
+        const codeToInsert = codeStart + getCompressedCode(method.code);
 
         if (!insertionsByLine.has(lineIndex)) {
           insertionsByLine.set(lineIndex, []);
