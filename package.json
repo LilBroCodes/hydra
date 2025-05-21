@@ -1,6 +1,6 @@
 {
   "name": "hydra",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "\"Modding\" framework for compiled / obfuscated javascript ",
   "main": "dist/main.js",
   "bin": {
