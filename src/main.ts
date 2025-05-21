@@ -8,7 +8,7 @@ const program = new Command();
 program
     .name("hydra")
     .description("CLI Interface for Hydra")
-    .version("1.2.3")
+    .version("1.2.4")
 
 program
     .command("build")

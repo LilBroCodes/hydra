@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>hydra</id>
+    <version>1.2.4</version>
+    <title>Hydra</title>
+    <authors>LilBroCodes</authors>
+    <owners>LilBroCodes</owners>
+    <summary>"Modding" framework for compiled / obfuscated JavaScript</summary>
+    <description>Hydra is a "modding" framework designed to modify large compiled JavaScript files (webpack output files, etc.).</description>
+    <projectUrl>https://github.com/LilBroCodes/hydra</projectUrl>
+    <licenseUrl>https://creativecommons.org/licenses/by-nc-sa/4.0/</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <tags>js modding hydra cli</tags>
+  </metadata>
+</package>
