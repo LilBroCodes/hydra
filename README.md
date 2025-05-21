@@ -14,8 +14,8 @@ _Yes_, the mixin naming and tagging system is inspired by SpongePowered's Mixin 
 
 - **`@At("HEAD" | "TAIL")`**
   - Used with the `@Inject` tag to specify whether the code should be injected at the start ("HEAD") or the end ("TAIL") of the method.
-  > [!WARNING]
-  > Currently, the `"TAIL"` option puts the code at the total end of the method, ignoring return statements, so your code will probably be unreachable. This will be fixed in the future, but as of now, it's not recommended to use it.
+> [!WARNING]
+> Currently, the `"TAIL"` option puts the code at the total end of the method, ignoring return statements, so your code will probably be unreachable. This will be fixed in the future, but as of now, it's not recommended to use it.
 
 - **`@Unique`**
 
