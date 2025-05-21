@@ -1,9 +1,11 @@
-import { getCompressedCode, getParamCount } from "../utils/utils";
+import {cleanComments, getCompressedCode, getParamCount} from "../utils/utils";
 import { processSourceFile } from "../source/processor";
 import { Mixin } from "../mixin/mixin";
 
 import fs from "fs";
 import path from "path";
+import {Inject} from "../mixin/tags/inject";
+import {Unique} from "../mixin/tags/unique";
 
 export function run(
   mixinFile: string,
@@ -24,42 +26,49 @@ export function run(
 
   type Insertion = { line: number; column: number; code: string };
   const insertionsByLine = new Map<number, Insertion[]>();
+  const unique: string[] = [];
 
   for (const method of mixin.methods) {
-    const sourceFunc = source.get({
-      name: method.match.method,
-      paramAmount: getParamCount(method.code),
-      ordinal: method.match.ordinal,
-    });
-
-    if (sourceFunc) {
-      const lineIndex = sourceFunc.startLine - 1;
-
-      if (lineIndex < 0 || lineIndex >= lines.length) {
-        console.error(
-          `Invalid insertion line for method ${method.match.method}. Skipping.`
-        );
-        continue;
-      }
-
-      const columnIndex = sourceFunc.startColumn + 1;
-
-      const codeToInsert = getCompressedCode(method.code);
-
-      if (!insertionsByLine.has(lineIndex)) {
-        insertionsByLine.set(lineIndex, []);
-      }
-      insertionsByLine.get(lineIndex)!.push({
-        line: lineIndex,
-        column: columnIndex,
-        code: codeToInsert,
+    if (method.tag instanceof Inject) {
+      const sourceFunc = source.get({
+        name: method.tag.method,
+        paramAmount: getParamCount(method.code),
+        ordinal: method.tag.ordinal,
       });
-    } else {
-      console.error(
-        `Method ${method.match.method}(${getParamCount(
-          method.code
-        )}) not found!`
-      );
+
+      if (sourceFunc) {
+        const lineIndex = sourceFunc.startLine - 1;
+
+        if (lineIndex < 0 || lineIndex >= lines.length) {
+          console.error(
+              `Invalid insertion line for method ${method.tag.method}. Skipping.`
+          );
+          continue;
+        }
+
+        const columnIndex = sourceFunc.startColumn + 1;
+
+        const codeToInsert = getCompressedCode(method.code);
+
+        if (!insertionsByLine.has(lineIndex)) {
+          insertionsByLine.set(lineIndex, []);
+        }
+        insertionsByLine.get(lineIndex)!.push({
+          line: lineIndex,
+          column: columnIndex,
+          code: codeToInsert,
+        });
+      } else {
+        console.error(
+            `Method ${method.tag.method}(${getParamCount(
+                method.code
+            )}) not found!`
+        );
+      }
+    } else if (method.tag instanceof Unique) {
+      unique.push(
+          cleanComments(method.code),
+      )
     }
   }
 
@@ -90,7 +99,13 @@ export function run(
     lines[lineIndex] = lineText;
   }
 
-  const modifiedSource = lines.join("\n");
+  let modifiedSource = lines.join("\n");
+
+  console.log('Inserting unique code...')
+  for (const string of unique) {
+    modifiedSource = string + modifiedSource;
+  }
+
   fs.writeFileSync(outPath, modifiedSource);
 
   console.log(`Wrote modified source file to '${outPath}'.`);

@@ -1,54 +1,46 @@
-import {parse, parseMixin} from "./parser";
-
-import fs from 'fs';
+import {Tag} from "./tags/tag";
+import {parseMixinCode} from "./mixinParser";
+import {BaseAt, ExtendedAt} from "./tags/at";
+import {Inject} from "./tags/inject";
+import {ModifyReturnValue} from "./tags/modifyReturnValue";
+import fs from "fs";
+import path from "path";
 
 export class Mixin {
     code: string;
-    lines: string[] = [];
-    methods: MixinMethod[];
+    methods: TaggedMethod[];
 
-    public constructor(code: string) {
+    constructor(code: string) {
         this.code = code;
-        this.lines = code.split('\n');
 
+        const rawMethods = parseMixinCode(this.code);
         this.methods = [];
+
+        for (const method of rawMethods) {
+            this.methods.push(new TaggedMethod(
+                method.line,
+                method.definitionCode,
+                method.comment,
+                Tag.fromString(method.comment)
+            ));
+        }
     }
 
-    public clearMethods() {
-        this.methods = [];
-    }
-
-    public parseFile(filename?: string) {
-        this.clearMethods();
-        const parsed = filename ? parseMixin(filename) : parse(this.code);
-        parsed.forEach(method => this.methods.push(MixinMethod.ofObject(method)));
-    }
-
-    public static ofFile(filename: string) {
-        const mixin = new Mixin(fs.readFileSync(filename, 'utf-8'));
-        mixin.parseFile(filename);
-        return mixin;
+    static ofFile(file: string) {
+        return new Mixin(fs.readFileSync(path.resolve(file), "utf-8"));
     }
 }
 
-export class MixinMethod {
-    match: { method: string; at: string; ordinal: number }
+export class TaggedMethod {
+    line: number;
     code: string
+    comment: string
+    tag: BaseAt | ExtendedAt | Inject | ModifyReturnValue | null
 
-    public constructor(match: { method: string; at: string; ordinal?: number }, code: string) {
-        this.match = {
-            method: match.method,
-            at: match.at,
-            ordinal: match.ordinal || 0
-        };
-
+    constructor(line: number, code: string, comment: string, tag: BaseAt | ExtendedAt | Inject | ModifyReturnValue | null) {
+        this.line = line;
         this.code = code;
-    }
-
-    public static ofObject(method: { match: { method: string; at: string; ordinal?: number }, functionCode: string }) {
-        return new MixinMethod(
-            method.match,
-            method.functionCode
-        )
+        this.comment = comment;
+        this.tag = tag;
     }
 }

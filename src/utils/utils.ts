@@ -31,6 +31,12 @@ export function getCompressedCode(raw: string): string {
         .join("");
 }
 
+export function cleanComments(raw: string): string {
+    return raw.split(/\n/)
+        .filter(string => !string.includes("//"))
+        .join("\n");
+}
+
 export function getParamCount(raw: string): number {
     const ast = parser.parse(raw, {
         sourceType: 'unambiguous',

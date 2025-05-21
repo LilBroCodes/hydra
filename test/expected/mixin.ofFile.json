@@ -1,65 +1,42 @@
 {
-  "lines": [
-    "function unrelatedFunction() {",
-    "    console.log(\"This is not an inject function.\");",
-    "}",
-    "",
-    "// @Inject(method = \"onInit\", at = \"HEAD\", ordinal = 0)",
-    "function initHook() {",
-    "    console.log(\"Injected at onInit HEAD with ordinal 0\");",
-    "}",
-    "",
-    "// @Inject(method=\"onRender\", at=\"TAIL\")",
-    "const renderHook = () => {",
-    "    console.log(\"Injected at onRender TAIL with no ordinal\");",
-    "}",
-    "const x = 42;",
-    "",
-    "// @Inject(method=\"onClick\", at=\"HEAD\", ordinal=2)",
-    "function clickHook() {",
-    "    const now = Date.now();",
-    "    console.log(\"Click hook executed at\", now);",
-    "}",
-    "",
-    "// @Inject(method = \"run(args)\", at=\"HEAD\")",
-    "function runHook(args) {",
-    "",
-    "}",
-    ""
-  ],
-  "code": "function unrelatedFunction() {\n    console.log(\"This is not an inject function.\");\n}\n\n// @Inject(method = \"onInit\", at = \"HEAD\", ordinal = 0)\nfunction initHook() {\n    console.log(\"Injected at onInit HEAD with ordinal 0\");\n}\n\n// @Inject(method=\"onRender\", at=\"TAIL\")\nconst renderHook = () => {\n    console.log(\"Injected at onRender TAIL with no ordinal\");\n}\nconst x = 42;\n\n// @Inject(method=\"onClick\", at=\"HEAD\", ordinal=2)\nfunction clickHook() {\n    const now = Date.now();\n    console.log(\"Click hook executed at\", now);\n}\n\n// @Inject(method = \"run(args)\", at=\"HEAD\")\nfunction runHook(args) {\n\n}\n",
+  "code": "// @Inject(method = \"anonymous\", at = @At(\"TAIL\"), ordinal=0)\r\nfunction onRun(a, b, c) {\r\n    console.log(\"HYDRA_1\");\r\n}\r\n\r\n// @Inject(method = \"anonymous\", at = @At(\"HEAD\"), ordinal=500)\r\nfunction onRun2() {\r\n    console.log(\"HYDRA_2\");\r\n}\r\n\r\n// @ModifyReturnValue(method = \"anonymous\", at = @At(method=\"mthd\", ordinal=0), ordinal=2)\r\nfunction onRun3() {\r\n    console.log(\"HYDRA_2\");\r\n}",
   "methods": [
     {
-      "match": {
-        "method": "onInit",
-        "at": "HEAD",
+      "line": 1,
+      "code": "// @Inject(method = \"anonymous\", at = @At(\"TAIL\"), ordinal=0)\nfunction onRun(a, b, c) {\n  console.log(\"HYDRA_1\");\n}\n\n// @Inject(method = \"anonymous\", at = @At(\"HEAD\"), ordinal=500)",
+      "comment": "@Inject(method = \"anonymous\", at = @At(\"TAIL\"), ordinal=0)",
+      "tag": {
+        "method": "anonymous",
+        "at": {
+          "where": "TAIL"
+        },
         "ordinal": 0
-      },
-      "code": "function initHook() {\n    console.log(\"Injected at onInit HEAD with ordinal 0\");\n}"
+      }
     },
     {
-      "match": {
-        "method": "onRender",
-        "at": "TAIL",
-        "ordinal": 0
-      },
-      "code": "const renderHook = () => {\n    console.log(\"Injected at onRender TAIL with no ordinal\");\n}"
+      "line": 6,
+      "code": "// @Inject(method = \"anonymous\", at = @At(\"HEAD\"), ordinal=500)\nfunction onRun2() {\n  console.log(\"HYDRA_2\");\n}\n\n// @ModifyReturnValue(method = \"anonymous\", at = @At(method=\"mthd\", ordinal=0), ordinal=2)",
+      "comment": "@Inject(method = \"anonymous\", at = @At(\"HEAD\"), ordinal=500)",
+      "tag": {
+        "method": "anonymous",
+        "at": {
+          "where": "HEAD"
+        },
+        "ordinal": 500
+      }
     },
     {
-      "match": {
-        "method": "onClick",
-        "at": "HEAD",
+      "line": 11,
+      "code": "// @ModifyReturnValue(method = \"anonymous\", at = @At(method=\"mthd\", ordinal=0), ordinal=2)\nfunction onRun3() {\n  console.log(\"HYDRA_2\");\n}",
+      "comment": "@ModifyReturnValue(method = \"anonymous\", at = @At(method=\"mthd\", ordinal=0), ordinal=2)",
+      "tag": {
+        "method": "anonymous",
+        "at": {
+          "method": "mthd",
+          "ordinal": 0
+        },
         "ordinal": 2
-      },
-      "code": "function clickHook() {\n    const now = Date.now();\n    console.log(\"Click hook executed at\", now);\n}"
-    },
-    {
-      "match": {
-        "method": "run(args)",
-        "at": "HEAD",
-        "ordinal": 0
-      },
-      "code": "function runHook(args) {\n\n}"
+      }
     }
   ]
 }

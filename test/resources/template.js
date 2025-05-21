@@ -1,25 +1,14 @@
-function unrelatedFunction() {
-    console.log("This is not an inject function.");
+// @Inject(method = "anonymous", at = @At("TAIL"), ordinal=0)
+function onRun(a, b, c) {
+    console.log("HYDRA_1");
 }
 
-// @Inject(method = "onInit", at = "HEAD", ordinal = 0)
-function initHook() {
-    console.log("Injected at onInit HEAD with ordinal 0");
+// @Inject(method = "anonymous", at = @At("HEAD"), ordinal=500)
+function onRun2() {
+    console.log("HYDRA_2");
 }
 
-// @Inject(method="onRender", at="TAIL")
-const renderHook = () => {
-    console.log("Injected at onRender TAIL with no ordinal");
-}
-const x = 42;
-
-// @Inject(method="onClick", at="HEAD", ordinal=2)
-function clickHook() {
-    const now = Date.now();
-    console.log("Click hook executed at", now);
-}
-
-// @Inject(method = "run(args)", at="HEAD")
-function runHook(args) {
-
+// @ModifyReturnValue(method = "anonymous", at = @At(method="mthd", ordinal=0), ordinal=2)
+function onRun3() {
+    console.log("HYDRA_2");
 }

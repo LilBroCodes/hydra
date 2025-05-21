@@ -17,8 +17,6 @@
     "@babel/generator": "^7.27.1",
     "@babel/parser": "^7.27.2",
     "@babel/traverse": "^7.27.1",
-    "@types/commander": "^2.12.5",
-    "@types/yaml": "^1.9.7",
     "commander": "^14.0.0",
     "yaml": "^2.8.0"
   },
