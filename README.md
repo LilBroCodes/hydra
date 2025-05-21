@@ -19,7 +19,7 @@ I'm too lazy to write this part right now—I'll get to it later. :P
 
 ## Experimental Tags
 
-> **[!WARNING]**  
+> [!WARNING]
 > These tags are experimental and may have bugs. If you encounter any, please report them.
 
 - **`@ModifyReturnValue(method: string, at: At(EXTENDED), ordinal?: number = 0)`**
