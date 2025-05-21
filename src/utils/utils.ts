@@ -5,8 +5,47 @@ import generate from '@babel/generator';
 import fs from "fs";
 import path from "path";
 
-export function insertAt(original: string, insert: string, index: number): string {
-    return original.slice(0, index) + insert + original.slice(index);
+export function findMethodCalls(code: string) {
+    const ast = parser.parse(code, {
+        sourceType: 'unambiguous',
+        plugins: ['typescript'],
+    });
+
+    type MethodCall = {
+        method: string,
+        paramCount: number,
+        ordinal: number
+    }
+    const calls: MethodCall[] = [];
+    const ordinals = new Map<string, number>();
+
+    traverse(ast, {
+        CallExpression(path) {
+            let methodName = '';
+            const callee = path.node.callee;
+
+            if (callee.type === 'Identifier') {
+                methodName = callee.name;
+            } else if (callee.type === 'MemberExpression') {
+                if (callee.property.type === 'Identifier') {
+                    methodName = callee.property.name;
+                } else if (callee.property.type === 'StringLiteral' || callee.property.type === 'NumericLiteral') {
+                    methodName = String(callee.property.value);
+                }
+            }
+
+            // @ts-ignore
+            ordinals.set(methodName, (ordinals.has(methodName) ? ordinals.get(methodName) : 0) + 1)
+
+            calls.push({
+                method: methodName,
+                paramCount: path.node.arguments.length,
+                ordinal: ordinals.get(methodName) || 0,
+            })
+        }
+    })
+
+    return calls;
 }
 
 export function getCompressedCode(raw: string): string {

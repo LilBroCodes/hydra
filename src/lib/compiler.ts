@@ -1,16 +1,16 @@
-import {cleanComments, getCompressedCode, getParamCount} from "../utils/utils";
+import { cleanComments, getCompressedCode, getParamCount } from "../utils/utils";
 import { processSourceFile } from "../source/processor";
 import { Mixin } from "../mixin/mixin";
 
 import fs from "fs";
 import path from "path";
-import {Inject} from "../mixin/tags/inject";
-import {Unique} from "../mixin/tags/unique";
+import { Inject } from "../mixin/tags/inject";
+import { Unique } from "../mixin/tags/unique";
 
 export function run(
-  mixinFile: string,
-  sourceFile: string,
-  outDir: string = "./out/"
+    mixinFile: string,
+    sourceFile: string,
+    outDir: string = "./out/"
 ) {
   const outPath = path.join(outDir, sourceFile);
   const outDirPath = path.dirname(outPath);
@@ -24,8 +24,8 @@ export function run(
 
   const lines = rawSource.split(/\r?\n/);
 
-  type Insertion = { line: number; column: number; code: string };
-  const insertionsByLine = new Map<number, Insertion[]>();
+  type Insertion = { line: number;column: number;code: string };
+  const insertionsByLine = new Map < number, Insertion[] > ();
   const unique: string[] = [];
 
   for (const method of mixin.methods) {
@@ -55,7 +55,7 @@ export function run(
         if (!insertionsByLine.has(lineIndex)) {
           insertionsByLine.set(lineIndex, []);
         }
-        insertionsByLine.get(lineIndex)!.push({
+        insertionsByLine.get(lineIndex) !.push({
           line: lineIndex,
           column: columnIndex,
           code: codeToInsert,
@@ -87,9 +87,9 @@ export function run(
 
       if (pos < 0 || pos > lineText.length) {
         console.error(
-          `Invalid insertion position on line ${
-            lineIndex + 1
-          }. Skipping insertion.`
+            `Invalid insertion position on line ${
+                lineIndex + 1
+            }. Skipping insertion.`
         );
         continue;
       }
