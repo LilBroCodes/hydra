@@ -11,7 +11,7 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\"",
     "test:update-base": "tsx test/update/update.ts",
     "hydra": "cd run && tsx ../src/main.ts",
-    "bundle": "yarn build && pkg . --targets node18-linux-x64 --output build/hydra-linux && pkg . --targets node18-win-x64 --output build/hydra-windows.exe && pkg . --targets node18-macos-x64 --output build/hydra-macos"
+    "bundle": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux && pkg . --targets node18-win-x64 --output build/hydra-windows.exe && pkg . --targets node18-macos-x64 --output build/hydra-macos"
   },
   "dependencies": {
     "@babel/generator": "^7.27.1",
