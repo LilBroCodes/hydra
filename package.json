@@ -1,6 +1,6 @@
 {
   "name": "hydra",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "\"Modding\" framework for compiled / obfuscated javascript ",
   "main": "dist/main.js",
   "bin": {
@@ -11,7 +11,10 @@
     "test": "mocha -r ts-node/register \"test/**/*.test.ts\"",
     "test:update-base": "tsx test/update/update.ts",
     "hydra": "cd run && tsx ../src/main.ts",
-    "bundle": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux && pkg . --targets node18-win-x64 --output build/hydra-windows.exe && pkg . --targets node18-macos-x64 --output build/hydra-macos"
+    "bundle:all": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux && pkg . --targets node18-win-x64 --output build/hydra-windows.exe && pkg . --targets node18-macos-x64 --output build/hydra-macos",
+    "bundle:linux": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux",
+    "bundle:windows": "tsc && pkg . --targets node18-win-x64 --output build/hydra-windows.exe",
+    "bundle:macos": "tsc && pkg . --targets node18-macos-x64 --output build/hydra-macos"
   },
   "dependencies": {
     "@babel/generator": "^7.27.1",
