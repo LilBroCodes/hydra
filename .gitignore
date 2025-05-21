@@ -15,4 +15,5 @@ yarn-error.log*
 /run/
 package-lock.json
 /build
-/publishing/choco/hydra.nuspec/tools/hydra-win.exe
+*hydra-win.exe
+/publishing/choco/hydra.nuspec/hydra.1.2.3.nupkg
