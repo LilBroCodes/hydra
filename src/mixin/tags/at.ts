@@ -1,12 +1,9 @@
 export class At {
-    static ofString(s: string): BaseAt | ExtendedAt | null {
+    static ofString(s: string): BaseAt | null {
         const baseMatch =  s.match(BaseAt.REGEX);
-        const extMatch =  s.match(ExtendedAt.REGEX);
 
         if (baseMatch) {
-            return new BaseAt(baseMatch[1]);
-        } else if (extMatch) {
-            return new ExtendedAt(extMatch[1], parseInt(extMatch[2]));
+            return new BaseAt(baseMatch[1], parseInt(baseMatch[2]), parseInt(baseMatch[3]));
         }
 
         return null;
@@ -14,21 +11,19 @@ export class At {
 }
 
 export class BaseAt {
-    static REGEX = /@At\("([^"]*)"\)/;
+    static REGEX = /@At\("([^"]*)"(?:\s*,\s*offset\s*=\s*\(\s*(\d+)\s*,\s*(\d+)\s*\))?\)/;
     where: string;
+    offset: {line: number, column: number};
 
-    constructor(where: string) {
+    constructor(where: string, line?: number, column?: number) {
         this.where = where;
+        this.offset = {
+            line: line || 0,
+            column: column || 0
+        }
     }
-}
 
-export class ExtendedAt {
-    static REGEX = /@At\s*\(\s*method\s*=\s*"([^"]*)"(?:,\s*ordinal\s*=\s*(\d*))?\)/;
-    method: string;
-    ordinal: number;
-
-    constructor(method: string, ordinal?: number) {
-        this.method = method;
-        this.ordinal = ordinal || 0;
-    }
+    hasOffset() {
+        return this.offset.line != 0 || this.offset.column != 0;
+    }    
 }

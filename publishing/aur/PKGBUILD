@@ -1,6 +1,6 @@
 # Maintainer: LilBroCodes <lilbrocodes@gmail.com>
 pkgname=hydra-js
-pkgver=1.2.4
+pkgver=1.2.5
 pkgrel=1
 pkgdesc='"Modding" framework for compiled / obfuscated JavasScript'
 arch=('x86_64')

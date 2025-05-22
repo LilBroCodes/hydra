@@ -1,4 +1,8 @@
-import { cleanComments, getCompressedCode, getParamCount } from "../utils/utils";
+import {
+  cleanComments,
+  getCompressedCode,
+  getParamCount,
+} from "../utils/utils";
 import { processSourceFile } from "../source/processor";
 import { Mixin } from "../mixin/mixin";
 
@@ -8,9 +12,9 @@ import { Inject } from "../mixin/tags/inject";
 import { Unique } from "../mixin/tags/unique";
 
 export function run(
-    mixinFile: string,
-    sourceFile: string,
-    outDir: string = "./out/"
+  mixinFile: string,
+  sourceFile: string,
+  outDir: string = "./out/"
 ) {
   const outPath = path.join(outDir, sourceFile);
   const outDirPath = path.dirname(outPath);
@@ -24,8 +28,8 @@ export function run(
 
   const lines = rawSource.split(/\r?\n/);
 
-  type Insertion = { line: number;column: number;code: string };
-  const insertionsByLine = new Map < number, Insertion[] > ();
+  type Insertion = { line: number; column: number; code: string };
+  const insertionsByLine = new Map<number, Insertion[]>();
   const unique: string[] = [];
 
   for (const method of mixin.methods) {
@@ -37,40 +41,48 @@ export function run(
       });
 
       if (sourceFunc) {
-        const at = method.tag.at.where == "TAIL" ? "TAIL" : "HEAD"
-        const lineIndex = at == "HEAD" ? sourceFunc.startLine - 1 : sourceFunc.endLine - 1;
+        const at = method.tag.at.where == "TAIL" ? "TAIL" : "HEAD";
+        const lineIndex =
+          (at == "HEAD" ? sourceFunc.startLine - 1 : sourceFunc.endLine - 1) +
+          method.tag.at.offset.line;
 
         if (lineIndex < 0 || lineIndex >= lines.length) {
           console.error(
-              `Invalid insertion line for method ${method.tag.method}. Skipping.`
+            `Invalid insertion line for method ${method.tag.method}. Skipping.`
           );
           continue;
         }
 
-        const columnIndex = at == "HEAD" ? sourceFunc.startColumn + 1 : sourceFunc.endColumn - 1;
+        const columnIndex =
+          (at == "HEAD"
+            ? sourceFunc.startColumn + 1
+            : sourceFunc.endColumn - 1) + method.tag.at.offset.column;
 
-        const codeStart = at == "TAIL" && lines[lineIndex].substring(0, columnIndex) != "" && !lines[lineIndex].match(/\s*;\s*/) ? ";" : "";
+        const codeStart =
+          at == "TAIL" &&
+          lines[lineIndex].substring(0, columnIndex) != "" &&
+          !lines[lineIndex].match(/\s*;\s*/)
+            ? ";"
+            : "";
         const codeToInsert = codeStart + getCompressedCode(method.code);
 
         if (!insertionsByLine.has(lineIndex)) {
           insertionsByLine.set(lineIndex, []);
         }
-        insertionsByLine.get(lineIndex) !.push({
+        insertionsByLine.get(lineIndex)!.push({
           line: lineIndex,
           column: columnIndex,
           code: codeToInsert,
         });
       } else {
         console.error(
-            `Method ${method.tag.method}(${getParamCount(
-                method.code
-            )}) not found!`
+          `Method ${method.tag.method}(${getParamCount(
+            method.code
+          )}) not found!`
         );
       }
     } else if (method.tag instanceof Unique) {
-      unique.push(
-          cleanComments(method.code),
-      )
+      unique.push(cleanComments(method.code));
     }
   }
 
@@ -83,19 +95,26 @@ export function run(
     let offset = 0;
 
     for (const insertion of insertions) {
-      const pos = insertion.column + offset;
+      let pos = insertion.column + offset;
 
-      if (pos < 0 || pos > lineText.length) {
+      if (pos < 0) {
         console.error(
-            `Invalid insertion position on line ${
-                lineIndex + 1
-            }. Skipping insertion.`
+          `Invalid insertion position (negative) on line ${
+            lineIndex + 1
+          }. Skipping insertion.`
         );
         continue;
       }
 
+      if (pos > lineText.length) {
+        const padding = pos - lineText.length;
+        lineText += " ".repeat(padding);
+      }
+
       lineText = lineText.slice(0, pos) + insertion.code + lineText.slice(pos);
       offset += insertion.code.length;
+
+      insertion.column = pos - offset + insertion.code.length;
     }
 
     lines[lineIndex] = lineText;
@@ -103,7 +122,7 @@ export function run(
 
   let modifiedSource = lines.join("\n");
 
-  console.log('Inserting unique code...')
+  console.log("Inserting unique code...");
   for (const string of unique) {
     modifiedSource = string + modifiedSource;
   }

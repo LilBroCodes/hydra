@@ -3,7 +3,7 @@ import {Tag} from "./tag";
 
 // noinspection SuspiciousTypeOfGuard
 export class Inject {
-    static REGEX = /@Inject\s*\(\s*method\s*=\s*"([^"]*)"\s*,\s*at\s*=\s*(@At\(\s*"[^"]*"\s*\))\s*(?:,\s*ordinal\s*=\s*(\d+))?\s*\)/;
+    static REGEX = /@Inject\s*\(\s*method\s*=\s*"([^"]+)"\s*,\s*at\s*=\s*(@At\("[^"]*"(?:\s*,\s*offset\s*=\s*\(\s*\d+\s*,\s*\d+\s*\))?\))\s*(?:,\s*ordinal\s*=\s*(\d+))?\s*\)/;
 
     method: string
     at: BaseAt
