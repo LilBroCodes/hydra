@@ -1,6 +1,6 @@
 {
   "name": "hydra",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "description": "\"Modding\" framework for compiled / obfuscated javascript ",
   "main": "dist/main.js",
   "bin": {
@@ -8,8 +8,6 @@
   },
   "scripts": {
     "build": "tsc",
-    "test": "mocha -r ts-node/register \"test/**/*.test.ts\"",
-    "test:update-base": "tsx test/update/update.ts",
     "hydra": "cd run && tsx ../src/main.ts",
     "bundle:all": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux && pkg . --targets node18-win-x64 --output build/hydra-windows.exe && pkg . --targets node18-macos-x64 --output build/hydra-macos",
     "bundle:linux": "tsc && pkg . --targets node18-linux-x64 --output build/hydra-linux",
@@ -21,17 +19,16 @@
     "@babel/parser": "^7.27.2",
     "@babel/traverse": "^7.27.1",
     "commander": "^14.0.0",
+    "copy-paste": "^2.1.1",
     "yaml": "^2.8.0"
   },
   "devDependencies": {
     "@types/babel__generator": "^7.27.0",
     "@types/babel__traverse": "^7.20.7",
-    "@types/mocha": "^10.0.10",
+    "@types/copy-paste": "^1.1.33",
     "@types/node": "^22.15.19",
     "cross-env-shell": "^7.0.3",
-    "mocha": "^11.4.0",
     "pkg": "^5.8.1",
-    "ts-node": "^10.9.2",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3"
   },
